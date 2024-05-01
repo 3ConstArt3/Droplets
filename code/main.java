@@ -3,51 +3,31 @@ import ddf.minim.*;
 Minim minim;
 AudioPlayer dropSound;
 
-ArrayList<Drop> rain;
+Rain rain;
 
 void setup()
 {
   surface.setTitle("Rain Droplets");
-  surface.setResizable(false);
-  surface.setLocation(displayWidth / 3, floor(0.1 * displayHeight));
 
-  minim = new Minim(this);
-  dropSound = minim.loadFile("dropSound.mp3");
-  rain = new ArrayList<Drop>();
+  createAudio();
+  rain = new Rain();
 
-  //fullScreen();
-  size(810, 600);
+  fullScreen();
 }
 
-void createDroplet()
+void createAudio()
 {
-  var radius = noise(sin(frameRate));
-
-  var posX = random(radius, width - radius);
-  var posY = random(radius, height - radius);
-  var position = new PVector(posX, posY);
-
-  rain.add(new Drop(position, radius));
+  minim = new Minim(this);
+  dropSound = minim.loadFile("dropSound.mp3");
 }
 
 void draw()
 {
   background(0);
-  
-  if (!dropSound.isPlaying()) dropSound.play();
 
-  createDroplet();
-  for (var drop : rain)
-  {
-    drop.drop();
-    drop.show();
-  }
+  if (!dropSound.isPlaying())
+    dropSound.play();
 
-  for (int d = 0; d < rain.size(); d++)
-  {
-    var drop = rain.get(d);
-
-    var hasDropVanished = (drop.lifeSpan <= 0);
-    if (hasDropVanished) rain.remove(d);
-  }
+  rain.animate();
+  rain.render();
 }
