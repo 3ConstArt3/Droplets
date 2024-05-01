@@ -13,20 +13,25 @@ class Drop
   {
     this.position = position;
     this.radius = radius;
-    this.deltaRadius = 0.5f;
+    this.deltaRadius = 0.6f;
 
     this.lifeSpan = 255;
     this.deltaLife = 3;
   }
 
   /* Function definition */
-  public void drop()
+  public void animate()
   {
     this.lifeSpan -= this.deltaLife;
     this.radius += this.deltaRadius;
   }
 
-  public void show()
+  public boolean hasVanished()
+  {
+    return this.lifeSpan <= 0;
+  }
+
+  public void render()
   {
     pushMatrix();
     translate(this.position.x, this.position.y);
@@ -37,5 +42,4 @@ class Drop
 
     popMatrix();
   }
-  
 }
